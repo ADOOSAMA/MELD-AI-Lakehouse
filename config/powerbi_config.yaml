@@ -1,0 +1,112 @@
+# Power BI Configuration - Gold Layer Integration
+powerbi:
+  # Databricks SQL connection to Gold Layer
+  databricks_sql:
+    server_hostname: "your-workspace.azuredatabricks.net"
+    http_path: "/sql/1.0/warehouses/your-warehouse-id"
+    access_token: "${DATABRICKS_TOKEN}"
+    # Key: Direct connection to Gold layer data
+    database: "gold.icu_data"
+    
+  # Semantic model configuration
+  semantic_model:
+    name: "ICU_MELD_Semantic_Model"
+    description: "ICU data with MELD scores for clinical decision support"
+    
+    # Tables and relationships
+    tables:
+      patients:
+        source_table: "gold.patients"
+        columns:
+          - patient_id
+          - admission_date
+          - discharge_date
+          - age
+          - gender
+          - diagnosis
+          
+      meld_scores:
+        source_table: "gold.meld_scores"
+        columns:
+          - patient_id
+          - score_date
+          - meld_score
+          - bilirubin
+          - inr
+          - creatinine
+          - risk_category
+          
+      lab_results:
+        source_table: "gold.lab_results"
+        columns:
+          - patient_id
+          - test_date
+          - test_name
+          - test_value
+          - normal_range
+          
+    # Relationships
+    relationships:
+      - from_table: "patients"
+        from_column: "patient_id"
+        to_table: "meld_scores"
+        to_column: "patient_id"
+        
+      - from_table: "patients"
+        from_column: "patient_id"
+        to_table: "lab_results"
+        to_column: "patient_id"
+        
+    # DAX measures
+    measures:
+      avg_meld_score:
+        formula: "AVERAGE(meld_scores[meld_score])"
+        description: "Average MELD score across all patients"
+        
+      high_risk_patients:
+        formula: "CALCULATE(COUNTROWS(meld_scores), meld_scores[risk_category] = \"High\")"
+        description: "Number of high-risk patients"
+        
+      meld_trend:
+        formula: "CALCULATE(AVERAGE(meld_scores[meld_score]), DATESINPERIOD(meld_scores[score_date], LASTDATE(meld_scores[score_date]), -30, DAY))"
+        description: "30-day MELD score trend"
+        
+    # Time intelligence
+    time_intelligence:
+      date_table: "patients"
+      date_column: "admission_date"
+      fiscal_year_start: 1  # January
+      
+    # Row-level security (RLS) - Ensure different stakeholders only see relevant data
+    row_level_security:
+      enabled: true
+      rules:
+        - table: "patients"
+          filter: "IF(HASONEVALUE(users[department]), users[department] = \"ICU\" || users[department] = \"Admin\", TRUE())"
+          description: "ICU and Admin departments can access patient data"
+        - table: "meld_scores"
+          filter: "IF(HASONEVALUE(users[role]), users[role] = \"Doctor\" || users[role] = \"Admin\", FALSE())"
+          description: "Only doctors and administrators can access MELD scores"
+        - table: "risk_assessment"
+          filter: "IF(HASONEVALUE(users[region]), users[region] = RELATED(hospitals[region]), TRUE())"
+          description: "Users can only see assessment data from their own region"
+          
+  # Dashboard configuration
+  dashboards:
+    clinical_overview:
+      name: "ICU Clinical Overview"
+      description: "High-level ICU metrics and MELD scores"
+      
+    meld_analysis:
+      name: "MELD Score Analysis"
+      description: "Detailed MELD score trends and risk stratification"
+      
+    patient_monitoring:
+      name: "Patient Monitoring"
+      description: "Real-time patient monitoring dashboard"
+      
+  # Refresh configuration
+  refresh:
+    schedule: "0 0 4 * * ?"  # Daily at 4 AM
+    timeout_minutes: 30
+

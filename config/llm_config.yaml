@@ -1,0 +1,103 @@
+# LLM Q&A Configuration - Power BI-LLM Q&A Prototype
+llm_qa:
+  # Azure OpenAI configuration
+  azure_openai:
+    endpoint: "https://your-resource.openai.azure.com/"
+    api_key: "${AZURE_OPENAI_API_KEY}"
+    deployment_name: "gpt-4"
+    
+  # Query processing
+  query_processing:
+    max_tokens: 1000
+    temperature: 0.1
+    timeout_seconds: 30
+    
+    # Query classification
+    classification:
+      intent_types:
+        - "data_query"
+        - "trend_analysis"
+        - "patient_search"
+        - "meld_score"
+        - "risk_assessment"
+        
+    # Whitelisted DAX patterns - Whitelist DAX patterns for security
+    dax_whitelist:
+      allowed_functions:
+        - "CALCULATE"
+        - "FILTER"
+        - "SUM"
+        - "AVERAGE"
+        - "COUNT"
+        - "COUNTROWS"
+        - "DATESINPERIOD"
+        - "DATEADD"
+        - "SAMEPERIODLASTYEAR"
+        - "RELATED"
+        - "DIVIDE"
+        - "IF"
+        - "HASONEVALUE"
+        - "ALL"
+        - "LASTDATE"
+        - "TODAY"
+        - "MONTH"
+        - "YEAR"
+        
+      allowed_tables:
+        - "patients"
+        - "meld_scores"
+        - "lab_results"
+        
+      allowed_columns:
+        - "patient_id"
+        - "meld_score"
+        - "bilirubin"
+        - "inr"
+        - "creatinine"
+        - "risk_category"
+        - "admission_date"
+        - "discharge_date"
+        
+    # Security and audit
+    security:
+      audit_logging: true
+      query_validation: true
+      max_query_complexity: 5
+      
+    # Response formatting
+    response_format:
+      include_dax_query: true
+      include_explanation: true
+      include_data_preview: true
+      max_rows_preview: 10
+      
+  # Natural language templates
+  templates:
+    data_query:
+      examples:
+        - "Show me the average MELD score for the last 30 days"
+        - "How many high-risk patients do we have?"
+        - "What is the trend in bilirubin levels?"
+        
+    trend_analysis:
+      examples:
+        - "Show me the MELD score trend over the past 6 months"
+        - "Compare current month vs last month"
+        - "What is the seasonal pattern in ICU admissions?"
+        
+    patient_search:
+      examples:
+        - "Find patients with MELD score above 25"
+        - "Show me patients admitted in the last week"
+        - "List patients by risk category"
+        
+  # Error handling
+  error_handling:
+    fallback_responses:
+      - "I couldn't understand your query. Please try rephrasing."
+      - "This query is not supported. Please check the available data."
+      - "I need more information to answer your question."
+      
+    retry_attempts: 3
+    retry_delay_seconds: 2
+

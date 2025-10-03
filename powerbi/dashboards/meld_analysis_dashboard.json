@@ -1,0 +1,239 @@
+{
+  "name": "MELD Score Analysis Dashboard",
+  "description": "Detailed MELD score trends and risk stratification for clinical analysis",
+  "version": "1.0.0",
+  "created_date": "2024-01-15",
+  "tiles": [
+    {
+      "id": "meld_score_overview",
+      "title": "MELD Score Overview",
+      "type": "KPI Card",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "width": 4,
+        "height": 3
+      },
+      "visualization": {
+        "measure": "Avg_MELD_Score",
+        "target": 15,
+        "format": "Decimal Number",
+        "color": "#2ca02c"
+      },
+      "description": "Current average MELD score with target comparison"
+    },
+    {
+      "id": "meld_components_chart",
+      "title": "MELD Components Analysis",
+      "type": "Multi-line Chart",
+      "position": {
+        "x": 4,
+        "y": 0,
+        "width": 8,
+        "height": 6
+      },
+      "visualization": {
+        "measures": [
+          "AVERAGE(meld_scores[bilirubin_value])",
+          "AVERAGE(meld_scores[inr_value])",
+          "AVERAGE(meld_scores[creatinine_value])"
+        ],
+        "x_axis": "charttime",
+        "format": "Decimal Number",
+        "colors": ["#1f77b4", "#ff7f0e", "#d62728"]
+      },
+      "description": "Trend of MELD component values over time"
+    },
+    {
+      "id": "meld_distribution_histogram",
+      "title": "MELD Score Distribution",
+      "type": "Histogram",
+      "position": {
+        "x": 0,
+        "y": 3,
+        "width": 4,
+        "height": 6
+      },
+      "visualization": {
+        "measure": "meld_score",
+        "bins": 20,
+        "format": "Decimal Number",
+        "color": "#9467bd"
+      },
+      "description": "Distribution of MELD scores across all patients"
+    },
+    {
+      "id": "risk_stratification_matrix",
+      "title": "Risk Stratification Matrix",
+      "type": "Matrix",
+      "position": {
+        "x": 0,
+        "y": 9,
+        "width": 6,
+        "height": 4
+      },
+      "visualization": {
+        "rows": ["risk_category"],
+        "columns": ["icu_severity"],
+        "values": ["Total_Patients", "Avg_MELD_Score"],
+        "format": "Mixed"
+      },
+      "description": "Risk stratification by ICU severity and MELD risk category"
+    },
+    {
+      "id": "meld_trend_comparison",
+      "title": "MELD Trend Comparison",
+      "type": "Multi-line Chart",
+      "position": {
+        "x": 6,
+        "y": 6,
+        "width": 6,
+        "height": 4
+      },
+      "visualization": {
+        "measures": [
+          "MELD_Trend_7_Days",
+          "MELD_Trend_30_Days",
+          "Avg_MELD_Score"
+        ],
+        "x_axis": "charttime",
+        "format": "Decimal Number",
+        "colors": ["#d62728", "#ff7f0e", "#2ca02c"]
+      },
+      "description": "Comparison of 7-day, 30-day, and overall MELD trends"
+    },
+    {
+      "id": "patient_risk_timeline",
+      "title": "Patient Risk Timeline",
+      "type": "Waterfall Chart",
+      "position": {
+        "x": 6,
+        "y": 10,
+        "width": 6,
+        "height": 3
+      },
+      "visualization": {
+        "measure": "meld_score",
+        "category": "risk_trend",
+        "format": "Decimal Number",
+        "color": "#e377c2"
+      },
+      "description": "Risk trend changes over time"
+    },
+    {
+      "id": "meld_correlation_heatmap",
+      "title": "MELD Component Correlations",
+      "type": "Heatmap",
+      "position": {
+        "x": 0,
+        "y": 13,
+        "width": 6,
+        "height": 4
+      },
+      "visualization": {
+        "x_axis": "concept_name",
+        "y_axis": "risk_category",
+        "value": "valuenum",
+        "format": "Decimal Number",
+        "color_scheme": "Red-Blue"
+      },
+      "description": "Correlation between MELD components and risk categories"
+    },
+    {
+      "id": "meld_prediction_chart",
+      "title": "MELD Score Prediction",
+      "type": "Scatter Chart",
+      "position": {
+        "x": 6,
+        "y": 13,
+        "width": 6,
+        "height": 4
+      },
+      "visualization": {
+        "x_axis": "bilirubin_value",
+        "y_axis": "meld_score",
+        "size": "creatinine_value",
+        "color": "risk_category",
+        "format": "Decimal Number"
+      },
+      "description": "MELD score prediction based on component values"
+    },
+    {
+      "id": "meld_alerts_table",
+      "title": "MELD Score Alerts",
+      "type": "Table",
+      "position": {
+        "x": 0,
+        "y": 17,
+        "width": 12,
+        "height": 3
+      },
+      "visualization": {
+        "columns": [
+          "subject_id",
+          "charttime",
+          "meld_score",
+          "risk_category",
+          "days_since_last_calc"
+        ],
+        "filters": [
+          "meld_score >= 25",
+          "days_since_last_calc <= 1"
+        ],
+        "format": "Mixed"
+      },
+      "description": "Recent high-risk MELD scores requiring attention"
+    }
+  ],
+  "filters": [
+    {
+      "name": "Time Period",
+      "type": "Date Range",
+      "column": "charttime",
+      "default_value": "Last 90 Days"
+    },
+    {
+      "name": "Risk Category",
+      "type": "Multi-select",
+      "column": "risk_category",
+      "default_value": "All"
+    },
+    {
+      "name": "MELD Score Range",
+      "type": "Range",
+      "column": "meld_score",
+      "default_value": "0 to 50"
+    }
+  ],
+  "drill_through": [
+    {
+      "target_page": "Patient Detail",
+      "filters": ["subject_id", "charttime"]
+    }
+  ],
+  "bookmarks": [
+    {
+      "name": "High Risk Focus",
+      "filters": {
+        "risk_category": ["High", "Critical"]
+      }
+    },
+    {
+      "name": "Recent Trends",
+      "filters": {
+        "charttime": "Last 30 Days"
+      }
+    }
+  ],
+  "refresh_settings": {
+    "auto_refresh": true,
+    "refresh_interval_minutes": 10,
+    "data_source_refresh": "Real-time"
+  },
+  "permissions": {
+    "view": ["Doctors", "Clinical_Analysts", "Administrators"],
+    "edit": ["Clinical_Analysts", "Administrators"],
+    "admin": ["Administrators"]
+  }
+}
+

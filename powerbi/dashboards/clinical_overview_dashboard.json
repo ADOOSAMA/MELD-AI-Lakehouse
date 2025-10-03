@@ -1,0 +1,211 @@
+{
+  "name": "ICU Clinical Overview Dashboard",
+  "description": "High-level ICU metrics and MELD scores for clinical decision support",
+  "version": "1.0.0",
+  "created_date": "2024-01-15",
+  "tiles": [
+    {
+      "id": "total_patients_card",
+      "title": "Total Patients",
+      "type": "Card",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "visualization": {
+        "measure": "Total_Patients",
+        "format": "Whole Number",
+        "color": "#1f77b4"
+      },
+      "description": "Total number of patients in the ICU"
+    },
+    {
+      "id": "avg_meld_score_card",
+      "title": "Average MELD Score",
+      "type": "Card",
+      "position": {
+        "x": 3,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "visualization": {
+        "measure": "Avg_MELD_Score",
+        "format": "Decimal Number",
+        "color": "#ff7f0e"
+      },
+      "description": "Average MELD score across all patients"
+    },
+    {
+      "id": "high_risk_patients_card",
+      "title": "High Risk Patients",
+      "type": "Card",
+      "position": {
+        "x": 6,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "visualization": {
+        "measure": "High_Risk_Patients",
+        "format": "Whole Number",
+        "color": "#d62728"
+      },
+      "description": "Number of patients with high MELD risk"
+    },
+    {
+      "id": "critical_risk_patients_card",
+      "title": "Critical Risk Patients",
+      "type": "Card",
+      "position": {
+        "x": 9,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "visualization": {
+        "measure": "Critical_Risk_Patients",
+        "format": "Whole Number",
+        "color": "#8c564b"
+      },
+      "description": "Number of patients with critical MELD risk"
+    },
+    {
+      "id": "meld_trend_chart",
+      "title": "MELD Score Trend (30 Days)",
+      "type": "Line Chart",
+      "position": {
+        "x": 0,
+        "y": 2,
+        "width": 6,
+        "height": 4
+      },
+      "visualization": {
+        "measure": "MELD_Trend_30_Days",
+        "x_axis": "charttime",
+        "format": "Decimal Number",
+        "color": "#2ca02c"
+      },
+      "description": "30-day trend of average MELD scores"
+    },
+    {
+      "id": "risk_distribution_chart",
+      "title": "Risk Distribution",
+      "type": "Pie Chart",
+      "position": {
+        "x": 6,
+        "y": 2,
+        "width": 6,
+        "height": 4
+      },
+      "visualization": {
+        "measure": "Risk_Distribution_Percent",
+        "category": "risk_category",
+        "format": "Percentage",
+        "colors": ["#1f77b4", "#ff7f0e", "#d62728", "#8c564b"]
+      },
+      "description": "Distribution of patients by risk category"
+    },
+    {
+      "id": "icu_length_chart",
+      "title": "ICU Length of Stay",
+      "type": "Bar Chart",
+      "position": {
+        "x": 0,
+        "y": 6,
+        "width": 6,
+        "height": 4
+      },
+      "visualization": {
+        "measure": "Avg_ICU_Length",
+        "category": "icu_severity",
+        "format": "Decimal Number",
+        "color": "#9467bd"
+      },
+      "description": "Average ICU length of stay by severity"
+    },
+    {
+      "id": "clinical_complexity_chart",
+      "title": "Clinical Complexity",
+      "type": "Column Chart",
+      "position": {
+        "x": 6,
+        "y": 6,
+        "width": 6,
+        "height": 4
+      },
+      "visualization": {
+        "measure": "High_Complexity_Patients",
+        "category": "clinical_complexity",
+        "format": "Whole Number",
+        "color": "#e377c2"
+      },
+      "description": "Number of patients by clinical complexity"
+    },
+    {
+      "id": "risk_trend_table",
+      "title": "Risk Trend Analysis",
+      "type": "Table",
+      "position": {
+        "x": 0,
+        "y": 10,
+        "width": 12,
+        "height": 4
+      },
+      "visualization": {
+        "columns": [
+          "risk_trend",
+          "Patients_Improving",
+          "Patients_Deteriorating",
+          "Avg_MELD_Score"
+        ],
+        "format": "Mixed"
+      },
+      "description": "Detailed risk trend analysis by patient group"
+    }
+  ],
+  "filters": [
+    {
+      "name": "Date Range",
+      "type": "Date Range",
+      "column": "charttime",
+      "default_value": "Last 30 Days"
+    },
+    {
+      "name": "Risk Category",
+      "type": "Multi-select",
+      "column": "risk_category",
+      "default_value": "All"
+    },
+    {
+      "name": "ICU Severity",
+      "type": "Multi-select",
+      "column": "icu_severity",
+      "default_value": "All"
+    }
+  ],
+  "refresh_settings": {
+    "auto_refresh": true,
+    "refresh_interval_minutes": 15,
+    "data_source_refresh": "Daily at 4 AM"
+  },
+  "permissions": {
+    "view": ["ICU_Staff", "Doctors", "Administrators"],
+    "edit": ["Administrators", "Data_Analysts"],
+    "admin": ["Administrators"]
+  },
+  "mobile_layout": {
+    "enabled": true,
+    "tiles": [
+      "total_patients_card",
+      "avg_meld_score_card",
+      "high_risk_patients_card",
+      "critical_risk_patients_card",
+      "meld_trend_chart",
+      "risk_distribution_chart"
+    ]
+  }
+}
+

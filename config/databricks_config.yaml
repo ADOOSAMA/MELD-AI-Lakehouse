@@ -1,0 +1,74 @@
+# Azure Databricks Configuration
+databricks:
+  workspace_url: "https://your-workspace.azuredatabricks.net"
+  access_token: "${DATABRICKS_TOKEN}"
+  
+  # Cluster configuration
+  cluster:
+    name: "icu-etl-cluster"
+    node_type_id: "Standard_DS3_v2"
+    num_workers: 2
+    spark_version: "13.3.x-scala2.12"
+    autotermination_minutes: 30
+    
+  # Storage configuration
+  storage:
+    adls_gen2:
+      account_name: "yourstorageaccount"
+      container_name: "icu-data"
+      mount_point: "/mnt/icu-data"
+      
+    delta_tables:
+      bronze_catalog: "bronze"
+      silver_catalog: "silver" 
+      gold_catalog: "gold"
+      
+  # Job configuration
+  jobs:
+    bronze_etl:
+      name: "ICU Bronze ETL"
+      schedule: "0 0 2 * * ?"  # Daily at 2 AM
+      timeout_seconds: 3600
+      
+    silver_etl:
+      name: "ICU Silver ETL"
+      schedule: "0 30 2 * * ?"  # Daily at 2:30 AM
+      timeout_seconds: 3600
+      
+    gold_etl:
+      name: "ICU Gold ETL"
+      schedule: "0 0 3 * * ?"  # Daily at 3 AM
+      timeout_seconds: 3600
+
+# Data quality configuration
+data_quality:
+  rules:
+    completeness:
+      threshold: 0.95
+    accuracy:
+      threshold: 0.98
+    consistency:
+      threshold: 0.99
+      
+  alerts:
+    email: "admin@yourcompany.com"
+    slack_webhook: "${SLACK_WEBHOOK_URL}"
+
+# MELD Score configuration
+meld_score:
+  parameters:
+    bilirubin:
+      min_value: 1.0
+      max_value: 50.0
+    inr:
+      min_value: 1.0
+      max_value: 10.0
+    creatinine:
+      min_value: 1.0
+      max_value: 10.0
+      
+  risk_stratification:
+    low: 10
+    medium: 20
+    high: 30
+

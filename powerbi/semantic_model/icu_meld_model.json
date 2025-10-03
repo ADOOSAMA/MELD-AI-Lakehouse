@@ -1,0 +1,376 @@
+{
+  "name": "ICU_MELD_Semantic_Model",
+  "description": "ICU data with MELD scores for clinical decision support",
+  "version": "1.0.0",
+  "tables": [
+    {
+      "name": "patients",
+      "description": "Patient information and ICU stay details",
+      "columns": [
+        {
+          "name": "subject_id",
+          "dataType": "Whole Number",
+          "description": "Unique patient identifier"
+        },
+        {
+          "name": "admission_date",
+          "dataType": "DateTime",
+          "description": "Patient admission date"
+        },
+        {
+          "name": "discharge_date",
+          "dataType": "DateTime",
+          "description": "Patient discharge date"
+        },
+        {
+          "name": "age",
+          "dataType": "Whole Number",
+          "description": "Patient age"
+        },
+        {
+          "name": "gender",
+          "dataType": "Text",
+          "description": "Patient gender"
+        },
+        {
+          "name": "icu_length_days",
+          "dataType": "Decimal Number",
+          "description": "Length of ICU stay in days"
+        },
+        {
+          "name": "icu_severity",
+          "dataType": "Text",
+          "description": "ICU stay severity classification"
+        },
+        {
+          "name": "admission_year",
+          "dataType": "Whole Number",
+          "description": "Admission year"
+        },
+        {
+          "name": "admission_quarter",
+          "dataType": "Text",
+          "description": "Admission quarter"
+        }
+      ]
+    },
+    {
+      "name": "meld_scores",
+      "description": "MELD scores and risk assessments",
+      "columns": [
+        {
+          "name": "subject_id",
+          "dataType": "Whole Number",
+          "description": "Patient identifier"
+        },
+        {
+          "name": "charttime",
+          "dataType": "DateTime",
+          "description": "Time when MELD score was calculated"
+        },
+        {
+          "name": "meld_score",
+          "dataType": "Decimal Number",
+          "description": "Calculated MELD score"
+        },
+        {
+          "name": "bilirubin_value",
+          "dataType": "Decimal Number",
+          "description": "Bilirubin value used in MELD calculation"
+        },
+        {
+          "name": "inr_value",
+          "dataType": "Decimal Number",
+          "description": "INR value used in MELD calculation"
+        },
+        {
+          "name": "creatinine_value",
+          "dataType": "Decimal Number",
+          "description": "Creatinine value used in MELD calculation"
+        },
+        {
+          "name": "risk_category",
+          "dataType": "Text",
+          "description": "Risk category based on MELD score"
+        }
+      ]
+    },
+    {
+      "name": "lab_results",
+      "description": "Laboratory test results",
+      "columns": [
+        {
+          "name": "subject_id",
+          "dataType": "Whole Number",
+          "description": "Patient identifier"
+        },
+        {
+          "name": "charttime",
+          "dataType": "DateTime",
+          "description": "Time when lab test was performed"
+        },
+        {
+          "name": "concept_name",
+          "dataType": "Text",
+          "description": "Lab test concept name"
+        },
+        {
+          "name": "valuenum",
+          "dataType": "Decimal Number",
+          "description": "Numeric lab result value"
+        },
+        {
+          "name": "valueuom",
+          "dataType": "Text",
+          "description": "Unit of measurement"
+        },
+        {
+          "name": "is_abnormal",
+          "dataType": "True/False",
+          "description": "Whether the result is abnormal"
+        }
+      ]
+    },
+    {
+      "name": "clinical_indicators",
+      "description": "Clinical complexity and measurement indicators",
+      "columns": [
+        {
+          "name": "subject_id",
+          "dataType": "Whole Number",
+          "description": "Patient identifier"
+        },
+        {
+          "name": "total_measurements",
+          "dataType": "Whole Number",
+          "description": "Total number of measurements"
+        },
+        {
+          "name": "unique_parameters",
+          "dataType": "Whole Number",
+          "description": "Number of unique parameters measured"
+        },
+        {
+          "name": "measurement_frequency",
+          "dataType": "Decimal Number",
+          "description": "Average measurement frequency"
+        },
+        {
+          "name": "warning_rate",
+          "dataType": "Decimal Number",
+          "description": "Rate of warning measurements"
+        },
+        {
+          "name": "clinical_complexity",
+          "dataType": "Text",
+          "description": "Clinical complexity classification"
+        }
+      ]
+    },
+    {
+      "name": "risk_assessment",
+      "description": "Patient risk assessment and trends",
+      "columns": [
+        {
+          "name": "subject_id",
+          "dataType": "Whole Number",
+          "description": "Patient identifier"
+        },
+        {
+          "name": "meld_calculations",
+          "dataType": "Whole Number",
+          "description": "Number of MELD calculations performed"
+        },
+        {
+          "name": "avg_meld_score",
+          "dataType": "Decimal Number",
+          "description": "Average MELD score"
+        },
+        {
+          "name": "max_meld_score",
+          "dataType": "Decimal Number",
+          "description": "Maximum MELD score"
+        },
+        {
+          "name": "min_meld_score",
+          "dataType": "Decimal Number",
+          "description": "Minimum MELD score"
+        },
+        {
+          "name": "meld_variability",
+          "dataType": "Decimal Number",
+          "description": "MELD score variability"
+        },
+        {
+          "name": "risk_trend",
+          "dataType": "Text",
+          "description": "Risk trend direction"
+        },
+        {
+          "name": "current_risk_category",
+          "dataType": "Text",
+          "description": "Current risk category"
+        },
+        {
+          "name": "days_since_last_calc",
+          "dataType": "Whole Number",
+          "description": "Days since last MELD calculation"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "name": "patients_meld_scores",
+      "fromTable": "patients",
+      "fromColumn": "subject_id",
+      "toTable": "meld_scores",
+      "toColumn": "subject_id",
+      "cardinality": "One-to-Many"
+    },
+    {
+      "name": "patients_lab_results",
+      "fromTable": "patients",
+      "fromColumn": "subject_id",
+      "toTable": "lab_results",
+      "toColumn": "subject_id",
+      "cardinality": "One-to-Many"
+    },
+    {
+      "name": "patients_clinical_indicators",
+      "fromTable": "patients",
+      "fromColumn": "subject_id",
+      "toTable": "clinical_indicators",
+      "toColumn": "subject_id",
+      "cardinality": "One-to-One"
+    },
+    {
+      "name": "patients_risk_assessment",
+      "fromTable": "patients",
+      "fromColumn": "subject_id",
+      "toTable": "risk_assessment",
+      "toColumn": "subject_id",
+      "cardinality": "One-to-One"
+    }
+  ],
+  "measures": [
+    {
+      "name": "Total_Patients",
+      "expression": "COUNTROWS(patients)",
+      "description": "Total number of patients",
+      "format": "Whole Number"
+    },
+    {
+      "name": "Avg_MELD_Score",
+      "expression": "AVERAGE(meld_scores[meld_score])",
+      "description": "Average MELD score across all patients",
+      "format": "Decimal Number"
+    },
+    {
+      "name": "High_Risk_Patients",
+      "expression": "CALCULATE(COUNTROWS(meld_scores), meld_scores[risk_category] = \"High\")",
+      "description": "Number of high-risk patients",
+      "format": "Whole Number"
+    },
+    {
+      "name": "Critical_Risk_Patients",
+      "expression": "CALCULATE(COUNTROWS(meld_scores), meld_scores[risk_category] = \"Critical\")",
+      "description": "Number of critical-risk patients",
+      "format": "Whole Number"
+    },
+    {
+      "name": "MELD_Trend_30_Days",
+      "expression": "CALCULATE(AVERAGE(meld_scores[meld_score]), DATESINPERIOD(meld_scores[charttime], LASTDATE(meld_scores[charttime]), -30, DAY))",
+      "description": "30-day MELD score trend",
+      "format": "Decimal Number"
+    },
+    {
+      "name": "MELD_Trend_7_Days",
+      "expression": "CALCULATE(AVERAGE(meld_scores[meld_score]), DATESINPERIOD(meld_scores[charttime], LASTDATE(meld_scores[charttime]), -7, DAY))",
+      "description": "7-day MELD score trend",
+      "format": "Decimal Number"
+    },
+    {
+      "name": "Risk_Distribution_Percent",
+      "expression": "DIVIDE(COUNTROWS(meld_scores), CALCULATE(COUNTROWS(meld_scores), ALL(meld_scores[risk_category])), 0)",
+      "description": "Risk distribution percentage",
+      "format": "Percentage"
+    },
+    {
+      "name": "Patients_Improving",
+      "expression": "CALCULATE(COUNTROWS(risk_assessment), risk_assessment[risk_trend] = \"Improving\")",
+      "description": "Number of patients with improving risk trend",
+      "format": "Whole Number"
+    },
+    {
+      "name": "Patients_Deteriorating",
+      "expression": "CALCULATE(COUNTROWS(risk_assessment), risk_assessment[risk_trend] = \"Deteriorating\")",
+      "description": "Number of patients with deteriorating risk trend",
+      "format": "Whole Number"
+    },
+    {
+      "name": "Avg_ICU_Length",
+      "expression": "AVERAGE(patients[icu_length_days])",
+      "description": "Average ICU length of stay",
+      "format": "Decimal Number"
+    },
+    {
+      "name": "High_Complexity_Patients",
+      "expression": "CALCULATE(COUNTROWS(clinical_indicators), clinical_indicators[clinical_complexity] = \"High\")",
+      "description": "Number of high complexity patients",
+      "format": "Whole Number"
+    }
+  ],
+  "time_intelligence": {
+    "date_table": "patients",
+    "date_column": "admission_date",
+    "fiscal_year_start": 1,
+    "auto_date_time": true,
+    "time_measures": [
+      {
+        "name": "MELD_Score_This_Month",
+        "expression": "CALCULATE(AVERAGE(meld_scores[meld_score]), MONTH(meld_scores[charttime]) = MONTH(TODAY()), YEAR(meld_scores[charttime]) = YEAR(TODAY()))",
+        "description": "MELD score for current month"
+      },
+      {
+        "name": "MELD_Score_Last_Month",
+        "expression": "CALCULATE(AVERAGE(meld_scores[meld_score]), MONTH(meld_scores[charttime]) = MONTH(TODAY()) - 1, YEAR(meld_scores[charttime]) = YEAR(TODAY()))",
+        "description": "MELD score for last month"
+      },
+      {
+        "name": "MELD_Score_YTD",
+        "expression": "CALCULATE(AVERAGE(meld_scores[meld_score]), YEAR(meld_scores[charttime]) = YEAR(TODAY()))",
+        "description": "MELD score year-to-date"
+      },
+      {
+        "name": "Month_Over_Month_Change",
+        "expression": "DIVIDE([MELD_Score_This_Month] - [MELD_Score_Last_Month], [MELD_Score_Last_Month], 0)",
+        "description": "Month-over-month change in MELD score"
+      }
+    ]
+  },
+  "row_level_security": {
+    "enabled": true,
+    "rules": [
+      {
+        "name": "Patient_Data_Access",
+        "table": "patients",
+        "expression": "IF(HASONEVALUE(users[department]), users[department] = \"ICU\" || users[department] = \"Admin\", TRUE())",
+        "description": "Restrict patient data access to ICU and Admin departments"
+      },
+      {
+        "name": "Sensitive_Data_Access",
+        "table": "meld_scores",
+        "expression": "IF(HASONEVALUE(users[role]), users[role] = \"Doctor\" || users[role] = \"Admin\", FALSE())",
+        "description": "Restrict sensitive MELD data to Doctors and Admins"
+      }
+    ]
+  },
+  "data_source": {
+    "type": "Databricks",
+    "server": "your-workspace.azuredatabricks.net",
+    "database": "gold.icu_data",
+    "authentication": "OAuth2"
+  }
+}
+
