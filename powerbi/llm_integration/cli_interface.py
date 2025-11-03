@@ -18,16 +18,16 @@ class CLIInterface:
     
     def run_interactive_mode(self):
         """Run interactive mode"""
-        print("🏥 ICU Data Q&A - Interactive Mode")
+        print(" ICU Data Q&A - Interactive Mode")
         print("Type 'help' for commands, 'quit' to exit")
         print("-" * 50)
         
         while True:
             try:
-                query = input("\n💬 Enter your query: ").strip()
+                query = input("\n Enter your query: ").strip()
                 
                 if query.lower() in ['quit', 'exit', 'q']:
-                    print("👋 Goodbye!")
+                    print(" Goodbye!")
                     break
                 elif query.lower() == 'help':
                     self.show_help()
@@ -38,13 +38,13 @@ class CLIInterface:
                 elif query:
                     self.process_query(query)
                 else:
-                    print("❓ Please enter a query or 'help' for commands")
+                    print(" Please enter a query or 'help' for commands")
                     
             except KeyboardInterrupt:
-                print("\n👋 Goodbye!")
+                print("\n Goodbye!")
                 break
             except Exception as e:
-                print(f"❌ Error: {e}")
+                print(f"Error: {e}")
     
     def process_query(self, query: str):
         """Process query"""
@@ -61,34 +61,34 @@ class CLIInterface:
             })
             
             if result['success']:
-                print(f"✅ Intent: {result['intent']}")
-                print(f"📊 DAX Query: {result['dax_query']}")
+                print(f" Intent: {result['intent']}")
+                print(f" DAX Query: {result['dax_query']}")
                 
                 if result['result']:
-                    print("\n📈 Results:")
+                    print("\n Results:")
                     for item in result['result']:
                         print(f"  {item}")
                 
                 if result['explanation']:
-                    print(f"\n💡 Explanation: {result['explanation']}")
+                    print(f"\n Explanation: {result['explanation']}")
                 
-                print(f"⏱️  Execution Time: {result.get('execution_time', 'N/A')}")
+                print(f" Execution Time: {result.get('execution_time', 'N/A')}")
             else:
-                print(f"❌ Error: {result['error']}")
+                print(f"Error: {result['error']}")
                 
         except Exception as e:
-            print(f"❌ Processing Error: {e}")
+            print(f"Processing Error: {e}")
     
     def show_help(self):
         """Show help information"""
         help_text = """
-📚 Available Commands:
+ Available Commands:
   help        - Show this help message
   history     - Show query history
   suggestions - Show query suggestions
   quit/exit/q - Exit the program
 
-💡 Example Queries:
+ Example Queries:
   - Show me the average MELD score
   - How many high-risk patients do we have?
   - What is the MELD score trend?
@@ -99,12 +99,12 @@ class CLIInterface:
     def show_history(self):
         """Show query history"""
         if not self.query_history:
-            print("📝 No queries in history")
+            print("No queries in history")
             return
         
-        print("\n📝 Query History:")
+        print("\n Query History:")
         for i, record in enumerate(self.query_history[-5:], 1):  # Show last 5 records
-            status = "✅" if record['success'] else "❌"
+            status = "" if record['success'] else "❌"
             print(f"  {i}. {status} {record['query']} ({record['intent']})")
     
     def show_suggestions(self):
@@ -118,13 +118,13 @@ class CLIInterface:
             "Compare this month to last month"
         ]
         
-        print("\n💡 Query Suggestions:")
+        print("\n Query Suggestions:")
         for i, suggestion in enumerate(suggestions, 1):
             print(f"  {i}. {suggestion}")
     
     def run_single_query(self, query: str):
         """Run single query"""
-        print(f"🏥 ICU Data Q&A - Single Query Mode")
+        print(f" ICU Data Q&A - Single Query Mode")
         print(f"Query: {query}")
         print("-" * 50)
         
@@ -132,7 +132,7 @@ class CLIInterface:
     
     def run_batch_queries(self, queries: List[str]):
         """Run batch queries"""
-        print(f"🏥 ICU Data Q&A - Batch Mode")
+        print(f"ICU Data Q&A - Batch Mode")
         print(f"Processing {len(queries)} queries")
         print("-" * 50)
         
@@ -160,7 +160,7 @@ def main():
                 queries = [line.strip() for line in f if line.strip()]
             cli.run_batch_queries(queries)
         except FileNotFoundError:
-            print(f"❌ File not found: {args.file}")
+            print(f" File not found: {args.file}")
     else:
         cli.run_interactive_mode()
 
