@@ -60,7 +60,7 @@ class PowerBIQAInterface:
         )
         
         # Main title
-        st.title("🏥 ICU Data Intelligence Hub")
+        st.title(" ICU Data Intelligence Hub")
         st.markdown("### Natural Language Query Interface for MELD Scores and Clinical Data")
         
         # Sidebar
@@ -75,7 +75,7 @@ class PowerBIQAInterface:
     def _create_sidebar(self):
         """Create sidebar"""
         with st.sidebar:
-            st.header("🔧 Configuration")
+            st.header("Configuration")
             
             # Query type selection
             query_type = st.selectbox(
@@ -98,7 +98,7 @@ class PowerBIQAInterface:
             st.divider()
             
             # Query suggestions
-            st.header("💡 Query Suggestions")
+            st.header(" Query Suggestions")
             suggestions = self._get_query_suggestions(query_type)
             
             for suggestion in suggestions:
@@ -119,7 +119,7 @@ class PowerBIQAInterface:
             )
         
         with col2:
-            if st.button("🔍 Query", type="primary", use_container_width=True):
+            if st.button(" Query", type="primary", use_container_width=True):
                 if query_input:
                     self._process_query(query_input)
                 else:
@@ -140,19 +140,19 @@ class PowerBIQAInterface:
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.markdown("**📊 Data Sources**")
+            st.markdown("** Data Sources**")
             st.markdown("- MELD Scores")
             st.markdown("- Patient Demographics")
             st.markdown("- Lab Results")
         
         with col2:
-            st.markdown("**🔒 Security**")
+            st.markdown("** Security**")
             st.markdown("- Row-level Security")
             st.markdown("- Query Validation")
             st.markdown("- Audit Logging")
         
         with col3:
-            st.markdown("**📈 Features**")
+            st.markdown("** Features**")
             st.markdown("- Natural Language")
             st.markdown("- Real-time Data")
             st.markdown("- Clinical Insights")
@@ -237,15 +237,15 @@ class PowerBIQAInterface:
                 st.metric("Execution Time", result.get('execution_time', 'N/A'))
             
             with col3:
-                st.metric("Status", "✅ Success")
+                st.metric("Status", " Success")
             
             # Display DAX query
-            with st.expander("🔍 Generated DAX Query", expanded=False):
+            with st.expander(" Generated DAX Query", expanded=False):
                 st.code(result.get('dax_query', ''), language='sql')
             
             # Display data results
             if result.get('result'):
-                st.subheader("📈 Data Results")
+                st.subheader(" Data Results")
                 
                 # Convert to DataFrame for display
                 if isinstance(result['result'], list):
@@ -255,7 +255,7 @@ class PowerBIQAInterface:
                     # If there is numeric data, display charts
                     numeric_columns = df.select_dtypes(include=['number']).columns
                     if len(numeric_columns) > 0:
-                        st.subheader("📊 Visualization")
+                        st.subheader(" Visualization")
                         
                         chart_type = st.selectbox(
                             "Chart Type",
@@ -277,15 +277,15 @@ class PowerBIQAInterface:
             
             # Display explanation
             if result.get('explanation'):
-                st.subheader("💡 Clinical Interpretation")
+                st.subheader(" Clinical Interpretation")
                 st.info(result['explanation'])
         
         else:
             # Display error information
-            st.error(f"❌ Query Failed: {result.get('error', 'Unknown error')}")
+            st.error(f"Query Failed: {result.get('error', 'Unknown error')}")
             
             # Provide suggestions
-            st.subheader("💡 Suggestions")
+            st.subheader(" Suggestions")
             st.markdown("- Try rephrasing your question")
             st.markdown("- Check if the data you're asking about is available")
             st.markdown("- Use simpler language")
@@ -294,7 +294,7 @@ class PowerBIQAInterface:
     def _display_query_history(self):
         """Display query history"""
         if st.session_state.query_history:
-            st.subheader("📝 Query History")
+            st.subheader("Query History")
             
             # Create history DataFrame
             history_df = pd.DataFrame(st.session_state.query_history)
@@ -313,7 +313,7 @@ class PowerBIQAInterface:
                         st.write(f"**Intent:** {record['intent']}")
                     
                     with col2:
-                        status = "✅ Success" if record['success'] else "❌ Failed"
+                        status = " Success" if record['success'] else "❌ Failed"
                         st.write(f"**Status:** {status}")
     
     def _create_pie_chart(self, df: pd.DataFrame):
