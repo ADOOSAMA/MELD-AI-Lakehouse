@@ -94,9 +94,9 @@ print("Monitoring data columns:", len(chart_silver.columns))
 print("Lab data columns:", len(lab_silver.columns))
 
 if len(chart_silver.columns) == len(lab_silver.columns):
-    print("✅ Column count matches, can merge")
+    print(" Column count matches, can merge")
 else:
-    print("❌ Column count mismatch, needs fixing")
+    print(" Column count mismatch, needs fixing")
 
 # Merge monitoring and lab data
 combined_silver = chart_silver.union(lab_silver)
