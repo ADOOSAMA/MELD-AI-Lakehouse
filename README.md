@@ -72,7 +72,6 @@ azure_databricks_lakehouse/
 
 - **Data Processing Efficiency**: Improved by 80%
 - **Query Response Time**: Reduced by 70%
-- **User Satisfaction**: Improved by 90%
 
 ## Skills Demonstrated
 
